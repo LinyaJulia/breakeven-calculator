@@ -1,33 +1,18 @@
 import streamlit as st
 import pandas as pd
-from openpyxl import Workbook
 import matplotlib.pyplot as plt
-from io import BytesIO
 
 # Title and instruction
 st.title('Breakeven Calculator')
 st.markdown("Download the template, fill it with your data (Year in column A, Cash Flow in column B, Initial Investment in cell C2), and upload it.")
 
 # Function to create an Excel template
-def create_excel_template():
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Financial Data"
-    ws['A1'] = 'Year'
-    ws['B1'] = 'Cash Flow'
-    ws['C1'] = 'Initial Investment'
-    data = [(1, 2000), (2, 3000), (3, 3500), (4, 4000)]
-    for i, (year, cash_flow) in enumerate(data, start=2):
-        ws[f'A{i}'] = year
-        ws[f'B{i}'] = cash_flow
-    ws['C2'] = 10000
-    excel_file = BytesIO()
-    wb.save(excel_file)
-    excel_file.seek(0)
-    return excel_file
+def get_existing_excel_file():
+    with open("Financial_Data_Template.xlsx", 'rb') as file:
+        return file.read()
 
 # Download Excel template
-excel_template = create_excel_template()
+excel_template = get_existing_excel_file()
 st.download_button(
     label="Download Excel Template",
     data=excel_template,
